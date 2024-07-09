@@ -17,7 +17,7 @@ export default function Home() {
 
         const movieData = await Promise.all(
           json.result.map(async (movie: Movie) => {
-            const omdbRes = await fetch(`http://www.omdbapi.com/?i=${movie.imdb_id}&apikey=${process.env.NEXT_PUBLIC_OMDB_KEY}`)
+            const omdbRes = await fetch(`https://www.omdbapi.com/?i=${movie.imdb_id}&apikey=${process.env.NEXT_PUBLIC_OMDB_KEY}`)
             const omdbData = await omdbRes.json()
             return {
               ...movie,
