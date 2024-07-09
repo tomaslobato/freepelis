@@ -40,8 +40,8 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center p-4 mt-20 md:mt-16">
       <div className="flex flex-wrap gap-2 justify-center">
-        {movies && movies.map((movie) => (
-          <MovieCard imdb_id={movie.imdb_id} image_url={movie.image_url} year={movie.year} title={movie.title} />
+        {movies && movies.map((movie, index) => (
+          <MovieCard imdb_id={movie.imdb_id} image_url={movie.image_url} year={movie.year} title={movie.title} key={index} />
         ))}
       </div>
     </main>
