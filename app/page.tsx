@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Movie, TMDBMovie } from "./types"
 import MovieCard from "@/components/MovieCard"
 import Link from "next/link"
-import { Search } from "lucide-react"
+import { Loader2, Search } from "lucide-react"
 
 const getMovies = async (searchQuery: string | null): Promise<Movie[]> => {
   try {
@@ -30,7 +30,8 @@ const getMovies = async (searchQuery: string | null): Promise<Movie[]> => {
 
 export default function Home() {
   const [movies, setMovies] = useState<Movie[] | null>(null)
-  const [err, setErr] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState<string>("")
 
   useEffect(() => {
@@ -39,23 +40,25 @@ export default function Home() {
         const data = await getMovies(null)
         setMovies(data)
       } catch (err) {
-        setErr("Failed to fetch movies")
+        setError("Hubo un error al cargar las películas")
+      } finally {
+        setIsLoading(false)
       }
     }
 
     fetchData()
   }, [])
 
-  if (err) {
-    return <div>{err}</div>
-  }
-
   const handleSearch = async () => {
+    setIsLoading(true)
+    setError(null)
     try {
       const data = await getMovies(searchQuery)
       setMovies(data)
     } catch (err) {
-      setErr("Failed to fetch movies")
+      setError("Hubo un error al buscar las películas")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -73,17 +76,23 @@ export default function Home() {
           <button onClick={handleSearch} className="bg-red-600 text-white p-1 flex justify-center items-center border-red-600 border rounded-lg"><Search /></button>
         </div>
       </header>
-      <div className="flex flex-wrap gap-2 justify-center">
-        {movies && movies.map((movie) => (
-          <MovieCard 
-            key={movie.id}
-            id={movie.id}
-            image_url={movie.image_url} 
-            year={movie.year} 
-            title={movie.title} 
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <Loader2 className="animate-spin w-10 h-10" />
+      ) : error ? (
+        <div className="text-red-500">{error}</div>
+      ) : (
+        <div className="flex flex-wrap gap-2 justify-center">
+          {movies && movies.map((movie) => (
+            <MovieCard
+              key={movie.id}
+              id={movie.id}
+              image_url={movie.image_url}
+              year={movie.year}
+              title={movie.title}
+            />
+          ))}
+        </div>
+      )}
     </main>
   )
 }
