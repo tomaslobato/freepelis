@@ -1,8 +1,5 @@
 # FreePelis
 
-El lugar para ver cualquier pelicula de forma gratuita.
+El lugar donde ver cualquier pelicula de forma gratuita.
 
-Made with Typescript, NextJS 14, VidSRC and OMDB
-
-TODO:
-- Search
+Made with Typescript, NextJS 14, lucide-react, VidSRC and TMDB
